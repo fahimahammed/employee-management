@@ -39,7 +39,7 @@ class EmployeeController extends Controller
     public function show(Employee $employeeId)
     {
         $employee = Employee::find($employeeId);
-        return view('employees.show')->with('employee', $employee);
+        return view('employees.show')->with('employee', $employee[0]);
     }
 
     /**

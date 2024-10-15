@@ -15,7 +15,9 @@
         <td>{{$employee->name}}</td>
         <td>{{$employee->job_title}}</td>
         <td>
-            <button>Show</button>
+            <a href="{{route('employee.show', $employee->id)}}">
+                <button class="btn btn-primary">Show</button>
+            </a>
         </td>
     </tr>        
     @endforeach
