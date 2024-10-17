@@ -30,11 +30,58 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        return view('employees.test')->with('employee', $request);
-        //$employee = Employee::create($request);
+        // dd($request->all());
+        // Validate the request data with custom error messages
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'job_title' => 'required|string|max:100',
+            'joining_date' => 'required|date',
+            'salary' => 'required|numeric|min:10000|max:100000',
+            'email' => 'nullable|email|unique:employees,email|max:255',
+            'mobile_no' => 'required|numeric|digits_between:10,15|unique:employees,mobile_no',
+            'address' => 'required|string|max:500',
+        ], [
+            'name.required' => 'The name field is required.',
+            'name.max' => 'The name may not be greater than 255 characters.',
 
-        //return redirect()->route('employee.show', $employee->id);
+            'job_title.required' => 'The job title field is required.',
+            'job_title.max' => 'The job title may not be greater than 100 characters.',
+
+            'joining_date.required' => 'The joining date field is required.',
+            'joining_date.date' => 'The joining date must be a valid date.',
+
+            'salary.required' => 'The salary field is required.',
+            'salary.numeric' => 'The salary must be a valid number.',
+            'salary.min' => 'The salary must be at least 10,000.',
+            'salary.max' => 'The salary may not be greater than 100,000.',
+
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'The email has already been taken.',
+            'email.max' => 'The email may not be greater than 255 characters.',
+
+            'mobile_no.required' => 'The mobile number field is required.',
+            'mobile_no.numeric' => 'The mobile number must be a valid number.',
+            'mobile_no.digits_between' => 'The mobile number must be between 10 and 15 digits.',
+            'mobile_no.unique' => 'The mobile number has already been taken.',
+
+            'address.required' => 'The address field is required.',
+            'address.max' => 'The address may not be greater than 500 characters.',
+        ]);
+
+        // Create a new employee instance
+        $employee = new Employee();
+        $employee->name = $validatedData['name'];
+        $employee->job_title = $validatedData['job_title'];
+        $employee->joining_date = $validatedData['joining_date'];
+        $employee->salary = $validatedData['salary'];
+        $employee->email = $validatedData['email'];
+        $employee->mobile_no = $validatedData['mobile_no'];
+        $employee->address = $validatedData['address'];
+
+        // Save the employee to the database
+        $employee->save();
+
+        return redirect()->route('employee.show', $employee->id);
     }
 
     /**
