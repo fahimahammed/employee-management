@@ -30,7 +30,11 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
+        return view('employees.test')->with('employee', $request);
+        //$employee = Employee::create($request);
+
+        //return redirect()->route('employee.show', $employee->id);
     }
 
     /**

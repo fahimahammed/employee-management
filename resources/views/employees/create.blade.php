@@ -4,7 +4,8 @@
 <div>
     create page
     
-    <form>
+    <form method="POST" action="{{route('employee.store')}}">
+        {{csrf_field()}}
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name" name="name" required>
