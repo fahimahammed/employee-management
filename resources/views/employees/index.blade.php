@@ -2,6 +2,11 @@
 
 @section('page-content')
 <h1>Employees</h1>
+<div class="text-end my-3">
+    <a href="{{route('employee.create')}}">
+        <button class="btn btn-primary">Create</button>
+    </a>
+</div>
 <table class="table table-striped table-border table-hover">
     <tr>
         <th>ID</th>
@@ -18,6 +23,7 @@
             <a href="{{route('employee.show', $employee->id)}}">
                 <button class="btn btn-primary">Show</button>
             </a>
+            
         </td>
     </tr>        
     @endforeach

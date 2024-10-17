@@ -9,3 +9,4 @@ Route::get('/', function () {
 
 Route::get("/test", [EmployeeController::class, 'index'])->name('employee.index');
 Route::get("/test/{employeeId}", [EmployeeController::class, 'show'])->name('employee.show');
+Route::get('/test/create/data', [EmployeeController::class, 'create'])->name('employee.create');
