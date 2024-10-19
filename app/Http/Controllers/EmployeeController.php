@@ -96,24 +96,50 @@ class EmployeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Employee $employee)
+    public function edit($employeeId)
     {
-        //
+        $employee = Employee::find($employeeId);
+        return view('employees.edit')->with('employee', $employee);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Employee $employee)
+    public function update(Request $request, $employeeId)
     {
-        //
+        $rules = [
+            "name" => "required|string|max:255",
+            "job_title" => "required|string|max:100",
+            "joining_date" => "required|date",
+            "salary" => "required|numeric|min:0",
+            "email" => "nullable|email|max:255",
+            "mobile_no" => "required|string|max:15",
+            "address" => "nullable|string",
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        $employee = Employee::findOrFail($employeeId);
+
+        $employee->update($validatedData);
+
+        return redirect()->route("employee.show", $employeeId);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy(Request $request, $employeeId)
     {
-        //
+        $employee = Employee::findOrFail($employeeId);
+        $employee->delete();
+        return redirect()->route("employee.index");
+    }
+
+    public function search(Request $request)
+    {
+        $text = '%' . $request->search . '%';
+        $employees = Employee::where('name', 'LIKE', $text)->paginate(10);
+        return view('employees.index')->with('employees', $employees);
     }
 }
